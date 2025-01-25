@@ -1,0 +1,34 @@
+# SelectionContainer
+
+## What It Does
+The `SelectionContainer` is a reusable UI wrapper that combines filters and content. It allows users to toggle between different categories (e.g., routines, favorites, shared routines) and view filtered content (e.g., a list of routines or exercises).
+
+## Key Features
+1. **Filter Options:**
+   - Displayed at the top of the container as clickable buttons or tabs.
+   - Filters include categories like:
+     - Routines
+     - Favorites
+     - Shared Routines
+     - Routine Blocks (e.g., Core, Legs).
+
+2. **Content Area:**
+   - Displays filtered content below the filters.
+   - Content is updated dynamically based on the selected filter.
+   - Can display lists, grids, or other layouts.
+
+3. **Action Buttons:**
+   - **Manual Entry Button:** Allows users to add a custom exercise directly to the Routine Builder.
+   - **Send Button:** Allows users to share routines with others.
+
+## Use Cases
+1. **Routine Builder:**  
+   - Users filter exercises by routine block (Core, Legs, etc.) and select the ones to add.
+   - Users can add custom exercises via the "Manual Entry" button.
+
+2. **Saved Routines:**  
+   - Users filter routines by categories like "Favorites" or "Shared Routines."
+   - Users can share routines via the "Send" button.
+
+3. **Exercise Library:**  
+   - Users filter exercises by type (e.g., Light Resistance, Heavy Pulling) to add to routines.
