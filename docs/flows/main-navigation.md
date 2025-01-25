@@ -10,5 +10,5 @@ flowchart TD
     
     CreateRoutine --> ChooseType{Choose Type}
     ChooseType -->|Template| SelectTemplate[Select Template]
-    ChooseType -->|Custom| TimerSetup[Timer Setup]
+    ChooseType -->|Custom| RoutineSetup[Routine Setup]
 ```
