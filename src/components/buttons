@@ -1,0 +1,30 @@
+# Primary Button Component
+
+## Purpose
+The Primary Button is a standard button used throughout the Mosaic app. It provides a premium, clean look and feel with consistent hover and active states for interactive elements.
+
+## Visual States
+- **Default:** Charcoal background (#111111) with white text
+- **Hover:** Slightly lighter charcoal background (#161616) to indicate hover
+- **Active/Pressed:** Turquoise glow effect (#40E0D0 with 20% opacity halo) when the button is clicked or pressed
+- **Disabled:** Darker gray (#333333) with reduced opacity (60%)
+
+## Usage Examples
+- **"CREATE ROUTINE"** button on the home screen
+- **"BROWSE TEMPLATES"** button in the template library
+- **"SAVE"** button in the routine builder
+
+## Variations
+- **Full width:** Used for prominent calls-to-action, e.g., on the home screen
+- **Compact:** Used within lists, with smaller padding and text
+- **With icon:** Optional icon can accompany the text (e.g., "SAVE" with a save icon)
+
+## Behavior
+- **Animation:** Subtle scale animation on press, shrinking to 95% of the original size
+- **Transition:** 150ms transition time for hover and active states
+- **Haptic feedback:** On press, especially when using on mobile devices
+
+## Technical Notes
+- The button inherits the global font styles from `styles.css`.
+- Consistent padding and margin values are used to ensure touch targets meet accessibility standards.
+- Supports both text-only and icon+text layouts.
