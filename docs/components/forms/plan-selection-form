@@ -1,0 +1,81 @@
+# Plan Selection Form
+
+## Overview
+The `PlanSelectionForm` enables users to browse, compare, and select subscription plans. Once a plan is selected, users are guided through the account creation process and payment authorization.
+
+---
+
+## Key Features
+
+1. **Plan Display**:
+   - Plans are presented as visually distinct cards, showing pricing, features, and benefits.
+   - The selected plan is visually highlighted (e.g., border or color change).
+
+2. **Plan Options**:
+   - **Individual Plan**: For a single user, includes personal access.
+   - **Studio Plan (Future Feature)**: Supports multiple instructor accounts under one plan, offering shared templates and team management capabilities.
+
+3. **Interactive Flow**:
+   - Each plan card includes a "Select Plan" button.
+   - After plan selection, users are redirected to the `CreateAccountForm` for account setup.
+
+4. **Responsive Design**:
+   - Mobile-first approach with responsive layouts to ensure usability across various devices.
+
+5. **Accessibility**:
+   - Uses ARIA labels and semantic HTML for accessibility compliance.
+
+---
+
+## Actions
+- **Select Plan**:
+   - Updates the user’s plan selection.
+   - Redirects users to the `CreateAccountForm`.
+
+---
+
+## Props (For Developers):
+- `plans`: An array of objects containing plan details, including:
+  - `name`: The name of the plan.
+  - `price`: The cost of the plan (e.g., monthly fee).
+  - `features`: A list of features included in the plan.
+- `onSelect`: A callback function triggered when a user selects a plan. The selected plan object is passed as an argument.
+
+---
+
+## Example Usage
+```javascript
+const plans = [
+  {
+    name: 'Individual',
+    price: '$11.99/month',
+    features: [
+      '1 Premium Account',
+      'Cancel Anytime',
+      '15 hours/month audiobook access',
+    ],
+  },
+  {
+    name: 'Studio',
+    price: 'Custom Pricing',
+    features: [
+      'Multiple Instructor Accounts',
+      'Shared Templates',
+      'Team Management',
+    ],
+  },
+];
+
+<PlanSelectionForm 
+  plans={plans} 
+  onSelect={(selectedPlan) => navigateToAccountCreation(selectedPlan)} 
+/>
+```
+
+---
+
+## Notes
+- The form should integrate with the `CreateAccountForm` and payment authorization flow.
+- Design consistency with Mosaic’s overall aesthetic is critical (e.g., typography, color palette).
+- For future scalability, consider dynamic pricing configurations for Studio Plans.
+
