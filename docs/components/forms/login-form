@@ -1,0 +1,152 @@
+# Login Form
+
+## Overview
+The `LoginForm` allows users to securely log into their Mosaic accounts. It includes fields for email or username and password. Additionally, the form can integrate Face ID for seamless biometric authentication on supported devices.
+
+---
+
+## Form Structure
+1. **Fields:**
+   - **Email/Username (required):**
+     - Text input field to accept the user's registered email or username.
+     - Validates for proper email format (if applicable).
+   - **Password (required):**
+     - Password input field with a "Show/Hide" toggle for visibility.
+     - Validates minimum length (e.g., 8 characters).
+
+2. **Forgot Password Link:**
+   - Redirects users to the `PasswordResetForm`.
+
+3. **Biometric Authentication (Optional):**
+   - Face ID or Touch ID for users with compatible devices.
+   - Offers an option to enable during initial login or via account settings.
+
+4. **Submit Button:**
+   - Triggers authentication.
+   - Disabled until all required fields are valid.
+
+---
+
+## Key Features
+1. **Validation:**
+   - Ensures email/username and password fields are filled out.
+   - Displays inline error messages for invalid credentials.
+2. **Biometric Integration:**
+   - Allows users to log in with Face ID or Touch ID after enabling the feature.
+3. **Loading State:**
+   - Disables the form and shows a spinner while authentication is in progress.
+4. **Error Handling:**
+   - Displays error messages for failed login attempts (e.g., "Invalid credentials").
+
+---
+
+## Props
+
+| **Prop**          | **Type**   | **Default** | **Description**                            |
+|-------------------|------------|-------------|--------------------------------------------|
+| `onSubmit`        | `function` | `null`      | Callback triggered on form submission.     |
+| `enableBiometrics` | `boolean`  | `false`     | Indicates if Face ID or Touch ID is enabled. |
+| `isLoading`       | `boolean`  | `false`     | Indicates if the form is submitting.       |
+
+---
+
+## Example Implementation
+```javascript
+<LoginForm
+  onSubmit={(credentials) => handleLogin(credentials)}
+  enableBiometrics={true}
+  isLoading={false}
+/>
+```
+
+---
+
+## CSS Requirements
+- **Wrapper**: Centered form with a max width of `400px`.
+- **Input Fields**:
+  - Border radius: `8px`.
+  - Padding: `10px`.
+  - Validation: Red border and error message for invalid fields.
+- **Biometric Button (Optional):**
+  - Should match the design language of other buttons (e.g., Face ID icon).
+
+```css
+.login-form {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  color: white;
+  font-family: "Julius Sans One", sans-serif;
+}
+
+.login-form .input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.login-form .error {
+  color: red;
+  font-size: 12px;
+}
+
+.login-form .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #40E0D0;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.login-form .submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-form .biometric-button {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #333;
+  color: white;
+  border: 1px solid #ccc;
+}
+```
+
+---
+
+## Backend Integration Requirements
+- The `onSubmit` callback should send the form data to the backend with this payload structure:
+  ```json
+  {
+    "username": "@jane",
+    "password": "password123"
+  }
+  ```
+- For biometrics:
+  - Integrate with device APIs for Face ID/Touch ID authentication.
+  - Store a token or flag in the user's account to indicate biometric login is enabled.
+
+---
+
+## Use Cases
+1. **Standard Login:**
+   - Users log in using their email/username and password.
+2. **Biometric Login:**
+   - Users log in using Face ID or Touch ID if enabled.
+3. **Forgot Password:**
+   - Users can reset their password via the `PasswordResetForm`.
+
+---
+
+### Notes for Developers
+- Ensure secure password handling with HTTPS and hashing on the backend.
+- For biometrics, leverage native device APIs (e.g., WebAuthn, Touch ID/Face ID APIs) and ensure fallback options for unsupported devices.
+
