@@ -83,3 +83,18 @@ const ButtonExamples = () => {
 };
 
 export default ButtonExamples;
+
+
+## Props for Button Component
+
+| **Prop**       | **Type**                          | **Default**   | **Description**                                      |
+|-----------------|-----------------------------------|---------------|-----------------------------------------------------|
+| `text`         | `string`                         | `""`          | Button label text (e.g., "Save Routine").           |
+| `onClick`      | `function`                       | `undefined`   | Action triggered when the button is clicked.        |
+| `size`         | `"small" | "medium" | "large"`  | `"medium"`   | Controls the button size.                           |
+| `disabled`     | `boolean`                        | `false`       | Disables the button and applies a disabled style.   |
+| `loading`      | `boolean`                        | `false`       | Shows a loading indicator instead of the label.     |
+| `icon`         | `ReactNode`                      | `null`        | Adds an icon before or after the label.             |
+| `type`         | `"button" | "submit" | "reset"`  | `"button"`   | Specifies the HTML button type.                    |
+| `fullWidth`    | `boolean`                        | `false`       | Expands the button to fill the container width.     |
+| `className`    | `string`                         | `""`          | Adds custom CSS classes for additional styling.     |
