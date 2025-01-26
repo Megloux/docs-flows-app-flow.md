@@ -1,0 +1,92 @@
+# Create Account Form
+
+## Overview
+The `CreateAccountForm` enables users to create an account after selecting a subscription plan. It collects essential user details, provides validation, and prepares the account for activation.
+
+---
+
+## Key Features
+
+1. **Form Fields**:
+   - **Full Name**:
+     - First Name (required).
+     - Last Name (required).
+   - **Email Address**:
+     - Text input, required.
+     - Validates proper email format.
+   - **Password**:
+     - Input with criteria validation (e.g., minimum 8 characters, at least 1 uppercase letter, 1 number).
+     - Displays a password strength indicator.
+   - **Confirm Password**:
+     - Ensures it matches the Password field.
+
+2. **Social Sign-In Options**:
+   - Enables users to sign up using:
+     - Google
+     - Apple
+  
+   - Uses OAuth for integration.
+
+3. **Selected Plan Details**:
+   - Displays plan summary at the top, including:
+     - Name
+     - Pricing
+     - Features (e.g., "Cancel anytime," "15 hours audiobook access/month").
+
+4. **Error Messaging**:
+   - Real-time validation feedback for invalid inputs.
+   - Specific messaging for password strength, email format, or mismatched passwords.
+
+5. **Submit Button**:
+   - Disabled until all fields are valid.
+   - Sends data to the backend and redirects users to the `PaymentAuthorizationForm` on success.
+
+---
+
+## Actions
+- **Submit**:
+   - Validates fields.
+   - Calls backend API for account creation.
+   - Passes user to payment processing flow upon success.
+
+- **Social Sign-In**:
+   - Triggers the respective OAuth flow.
+   - Returns user details for further validation.
+
+---
+
+## Props (For Developers):
+- `onSubmit`: Callback function that handles form submission.
+- `socialSignInHandlers`: Object with handlers for Google, Apple, and Facebook sign-in.
+- `selectedPlan`: Object containing details about the selected plan (name, price, benefits).
+
+---
+
+
+
+
+## Validation Rules
+1. **Email Validation**:
+   - Must follow proper email format.
+2. **Password Validation**:
+   - Minimum 8 characters.
+   - At least 1 uppercase letter and 1 number.
+3. **Confirm Password**:
+   - Must match the Password field.
+4. **Required Fields**:
+   - All fields must be completed before submission.
+
+---
+
+## Security Considerations
+- Use HTTPS for secure data transmission.
+- Hash passwords client-side before sending them to the server.
+- Implement CAPTCHA for bot protection.
+
+---
+
+## Notes
+- Ensure accessibility with labeled inputs, focus management, and ARIA attributes.
+- Provide clear error messages to guide users.
+- Test form responsiveness across devices and browsers.
+
