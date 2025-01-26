@@ -1,0 +1,148 @@
+
+# ProfileForm Component
+
+## Overview
+The `ProfileForm` component allows users to create or update their profiles in Mosaic. It captures key information such as the user’s name, handle, email, and password.
+
+---
+
+## Form Structure
+1. **Fields:**
+   - **Full Name (required):**
+     - A single-line text input.
+     - Validates that the name is not empty.
+   - **Handle (required):**
+     - A unique identifier (e.g., @username).
+     - Validates that the handle meets character requirements and is unique.
+   - **Email (required):**
+     - Validates proper email format.
+   - **Password (required):**
+     - Password input field with a "Show/Hide" toggle for visibility.
+     - Validates minimum length (e.g., 8 characters) and complexity (e.g., includes numbers or symbols).
+
+2. **Submit Button:**
+   - Submits the profile data.
+   - Includes a loading state during submission.
+
+---
+
+## Key Features
+1. **Validation:**
+   - Ensures all required fields are completed.
+   - Validates email format and password complexity.
+2. **Dynamic Error Messaging:**
+   - Displays errors inline for invalid or missing fields.
+3. **Loading State:**
+   - Disables the form and shows a spinner on the button during submission.
+4. **Inline Editing (Optional):**
+   - Allows users to edit their profile without leaving the form.
+
+---
+
+## Props
+
+| **Prop**          | **Type**   | **Default** | **Description**                            |
+|-------------------|------------|-------------|--------------------------------------------|
+| `initialValues`   | `object`   | `{}`        | Prefills the form for editing a profile.   |
+| `onSubmit`        | `function` | `null`      | Callback triggered on form submission.     |
+| `isLoading`       | `boolean`  | `false`     | Indicates if the form is submitting.       |
+
+---
+
+## Example Implementation
+```javascript
+<ProfileForm
+  initialValues={{
+    name: "Jane Doe",
+    handle: "@jane",
+    email: "jane@example.com"
+  }}
+  onSubmit={(profile) => console.log("Profile submitted:", profile)}
+  isLoading={false}
+/>
+```
+
+---
+
+## CSS Requirements
+- **Wrapper**: Centered form with a max width of `500px`.
+- **Input Fields**:
+  - Border radius: `8px`.
+  - Padding: `10px`.
+  - Validation: Red border and error message for invalid fields.
+- **Submit Button**:
+  - Background: Turquoise (#40E0D0).
+  - Hover: Slightly darker turquoise.
+  - Loading spinner when `isLoading` is `true`.
+
+```css
+.profile-form {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  color: white;
+  font-family: "Julius Sans One", sans-serif;
+}
+
+.profile-form .input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.profile-form .error {
+  color: red;
+  font-size: 12px;
+}
+
+.profile-form .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #40E0D0;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.profile-form .submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+```
+
+---
+
+## Backend Integration Requirements
+- The `onSubmit` callback should send the form data to the backend with this payload structure:
+  ```json
+  {
+    "name": "Jane Doe",
+    "handle": "@jane",
+    "email": "jane@example.com",
+    "password": "password123"
+  }
+  ```
+- API should handle:
+  - Validation errors (e.g., duplicate handles or invalid email).
+  - Authentication logic for updating sensitive fields like the password.
+
+---
+
+## Use Cases
+1. **Profile Creation:**
+   - Allows new users to create an account with required details.
+2. **Profile Editing:**
+   - Enables existing users to update their profile information.
+
+---
+
+### Notes for Developers
+- Ensure password input has proper encryption before being sent to the backend.
+- Add inline error messaging for invalid handles or emails (e.g., "This handle is already taken").
+- Consider adding optional features like "Upload Profile Picture."
+
