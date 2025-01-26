@@ -5,7 +5,7 @@ Validation should be implemented both on the frontend (required name) and the ba
 # ManualEntryForm Component
 
 ## Overview
-The `ManualEntryForm` component allows users to manually input exercises into the Routine Builder. It provides flexibility for users who prefer typing in their own exercises rather than selecting from the Exercise Library.
+The `manual-entry-form` component allows users to manually input exercises into the Routine Builder. It provides flexibility for users who prefer typing in their own exercises rather than selecting from the Exercise Library.
 
 ---
 
