@@ -1,1 +1,85 @@
+# StandardButton Component
 
+## Variants & States
+
+### Primary Button
+- Hairline white border (0.5px)
+- Black background
+- White text in Julius Sans One
+- Hover: Turquoise glow + border color change
+- Active: Stronger glow + 95% scale
+
+### Secondary Button
+- Hairline dark border (0.5px)
+- Other properties match Primary
+
+## CSS Specifications
+```css
+.button-base {
+  border-width: 0.5px;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 150ms;
+}
+
+.button-hover {
+  box-shadow: 0 0 15px rgba(64,224,208,0.5);
+  border-color: #40E0D0;
+}
+
+.button-active {
+  box-shadow: 0 0 20px rgba(64,224,208,0.7);
+  transform: scale(0.95);
+}
+implimentetaion example: 
+
+import React, { useState } from 'react';
+
+const ButtonExamples = () => {
+  const [isHovered1, setIsHovered1] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
+  const [isPressed1, setIsPressed1] = useState(false);
+  const [isPressed2, setIsPressed2] = useState(false);
+
+  return (
+    <div className="space-y-8 p-8 bg-black">
+      <button 
+        className={`w-full bg-black text-white py-4 rounded-lg border-[0.5px] border-white transition-all duration-150 uppercase tracking-wider font-primary ${
+          isHovered1 ? 'border-[#40E0D0]' : ''
+        } ${
+          isPressed1 ? 'scale-95' : ''
+        }`}
+        style={{
+          boxShadow: isHovered1 ? '0 0 15px rgba(64,224,208,0.5)' : 'none',
+          boxShadow: isPressed1 ? '0 0 20px rgba(64,224,208,0.7)' : ''
+        }}
+        onMouseEnter={() => setIsHovered1(true)}
+        onMouseLeave={() => setIsHovered1(false)}
+        onMouseDown={() => setIsPressed1(true)}
+        onMouseUp={() => setIsPressed1(false)}
+      >
+        CREATE ROUTINE
+      </button>
+
+      <button 
+        className={`w-full bg-black text-white py-4 rounded-lg border-[0.5px] border-gray-800 transition-all duration-150 uppercase tracking-wider font-primary ${
+          isHovered2 ? 'border-[#40E0D0]' : ''
+        } ${
+          isPressed2 ? 'scale-95' : ''
+        }`}
+        style={{
+          boxShadow: isHovered2 ? '0 0 15px rgba(64,224,208,0.5)' : 'none',
+          boxShadow: isPressed2 ? '0 0 20px rgba(64,224,208,0.7)' : ''
+        }}
+        onMouseEnter={() => setIsHovered2(true)}
+        onMouseLeave={() => setIsHovered2(false)}
+        onMouseDown={() => setIsPressed2(true)}
+        onMouseUp={() => setIsPressed2(false)}
+      >
+        BROWSE TEMPLATES
+      </button>
+    </div>
+  );
+};
+
+export default ButtonExamples;
