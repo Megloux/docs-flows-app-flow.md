@@ -1,0 +1,112 @@
+Got it! Here's the updated **PublicToggle** documentation reflecting this integration:
+
+---
+
+### **PublicToggle.md (Updated)**
+
+#### **Overview**
+The `PublicToggle` allows users to mark a routine as either **public** or **private**. Public routines are searchable by **titles**, **keywords in titles**, **user name**, or **handle** and can be favorited by other users. Favorited routines are added to the **Saved Routines** page, which can be filtered by categories like shared, saved, or favorites.
+
+---
+
+#### **Key Features**
+1. **Visibility Toggle:**
+   - A clear switch or button toggles between:
+     - **Public**: Routine is visible and searchable.
+     - **Private**: Routine is only visible to the user.
+
+2. **Dynamic Search Integration:**
+   - Public routines are searchable by:
+     - **Titles**
+     - **Keywords in Titles**
+     - **User Names**
+     - **Handles**
+
+3. **Favoriting Integration:**
+   - Public routines that are **favorited** are automatically added to the **Saved Routines** page.
+   - Favorited routines can be filtered by shared, saved, or favorites.
+
+4. **Default State:**
+   - New routines are set to **private** by default.
+
+---
+
+#### **Props**
+
+| **Prop**      | **Type**   | **Default** | **Description**                          |
+|---------------|------------|-------------|------------------------------------------|
+| `isPublic`    | `boolean`  | `false`     | Whether the routine is currently public. |
+| `onToggle`    | `function` | `null`      | Function to handle the toggle action.    |
+
+---
+
+#### **Example Implementation**
+```javascript
+<PublicToggle
+  isPublic={routine.isPublic}
+  onToggle={(newState) => handleVisibilityChange(routine.id, newState)}
+/>
+```
+
+---
+
+#### **CSS Specifications**
+```css
+.public-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.public-toggle .switch {
+  width: 40px;
+  height: 20px;
+  background-color: gray;
+  border-radius: 20px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.public-toggle .switch::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+.public-toggle .switch.public {
+  background-color: #40E0D0; /* Turquoise for public */
+}
+
+.public-toggle .switch.public::after {
+  transform: translateX(20px); /* Moves the circle to the "public" side */
+}
+```
+
+---
+
+#### **Use Cases**
+1. **Routine Builder:**
+   - Users can mark a routine as public or private during creation.
+2. **Saved Routines:**
+   - Users can toggle visibility for routines in their personal library.
+3. **Public Routine Discovery:**
+   - Public routines are searchable by titles, keywords, user names, or handles.
+4. **Favoriting Public Routines:**
+   - When favorited, public routines are added to the user’s **Saved Routines** page.
+
+---
+
+#### **Future Enhancements**
+- Add tooltips to clarify the implications of toggling between public and private.
+- Allow batch toggles for multiple routines at once.
+
+---
+
+Does this reflect the functionality you envision? Let me know if we should refine further! 😊
