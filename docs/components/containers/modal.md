@@ -12,6 +12,11 @@ The `Modal` component is a reusable popup container used in Mosaic for focused u
    - Displays options for sharing a routine via link or within the app.
 4. **Additional Details:**
    - Displays more information about an exercise or routine (e.g., tags, descriptions).
+5.  Reusability:
+- This modal structure can be reused in Mosaic for similar interactions, like:
+- Confirming a deletion.
+- Sharing routines.
+- Displaying more details about an exercise or routine.
 
 ## Props
 | **Prop**     | **Type**    | **Default**  | **Description**                                 |
