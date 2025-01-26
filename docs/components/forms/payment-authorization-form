@@ -1,0 +1,88 @@
+# PaymentAuthorizationForm
+
+## Overview
+The `PaymentAuthorizationForm` enables users to securely input their payment details and authorize subscription payments after creating an account. Upon successful payment, users are redirected to the `CreateProfilePage` to review their account information and personalize their profile.
+
+---
+
+## Key Features
+
+1. **Payment Methods**:
+   - Credit/Debit Cards (Visa, Mastercard, American Express, Discover).
+   - Digital Wallets (Apple Pay, Google Pay).
+   - Manual Entry (optional, but discouraged for security reasons).
+
+2. **Form Fields**:
+   - **Cardholder Name** (text input, required).
+   - **Card Number** (numeric input, required, with validation).
+   - **Expiration Date** (MM/YY format, required).
+   - **CVV** (numeric input, required, 3-4 digits).
+   - **Billing Address** (text inputs, optional if already provided during account creation).
+
+3. **Payment Summary**:
+   - Display selected subscription plan, price, and renewal details at the top of the form.
+   - Include applicable taxes and total amount.
+
+4. **Security**:
+   - PCI-compliant handling of sensitive payment information.
+   - Tokenization of payment details via payment gateway API.
+
+5. **Submit Button**:
+   - Triggers payment processing.
+   - Disabled until all required fields are valid.
+
+6. **Error Handling**:
+   - Real-time validation for each field.
+   - Display clear error messages for invalid inputs or failed transactions.
+
+---
+
+## Actions
+- **Authorize Payment**:
+   - Validates payment details.
+   - Sends data to the payment gateway API.
+   - Upon successful payment, redirects the user to the `CreateProfilePage` to manage their profile, add a picture, studio details, and review their account information.
+
+---
+
+## Props (For Developers):
+- `plan`: Object containing the selected plan details (name, price, taxes, total).
+- `onPaymentSuccess`: Function triggered upon successful payment.
+- `onPaymentError`: Function triggered if payment fails, with an error message.
+- `paymentOptions`: Object specifying enabled payment methods (e.g., cards, Apple Pay, Google Pay).
+
+---
+
+
+---
+
+## Validation Rules
+1. **Card Number**: Must be a valid credit/debit card number.
+2. **Expiration Date**: Must be in MM/YY format and not expired.
+3. **CVV**: Must be 3-4 digits.
+4. **Required Fields**: All required fields must be completed before submission.
+
+---
+
+## Notes
+- Ensure all payment interactions comply with PCI-DSS standards.
+- Use payment gateway APIs for secure tokenization and transaction processing.
+- Provide localized formatting (e.g., currency symbols, date formats) based on the user's region.
+- Include clear feedback for users during processing (e.g., a loading spinner) and after completion (e.g., success or error messages).
+- Design for mobile-first with responsive and accessible layouts.
+
+---
+
+## Integration Requirements
+- **Stripe API**:
+   - Set up Stripe payment gateway for cards, Apple Pay, and Google Pay.
+   - Use Stripe’s client-side library (e.g., Stripe.js) to handle tokenization.
+
+- **Apple Pay/Google Pay**:
+   - Configure merchant accounts for both platforms.
+   - Follow their respective integration guidelines to enable seamless checkout.
+
+---
+
+Let me know if this needs further refinement or additional details for implementation!
+
