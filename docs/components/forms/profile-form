@@ -1,8 +1,7 @@
-
 # ProfileForm Component
 
 ## Overview
-The `ProfileForm` component allows users to create or update their profiles in Mosaic. It captures key information such as the user’s name, handle, email, and password.
+The `ProfileForm` component allows users to create or update their profiles in Mosaic. It captures key information such as the user’s name, handle, email, password, studio, and profile picture. Users can also manage their subscriptions from this form.
 
 ---
 
@@ -19,6 +18,13 @@ The `ProfileForm` component allows users to create or update their profiles in M
    - **Password (required):**
      - Password input field with a "Show/Hide" toggle for visibility.
      - Validates minimum length (e.g., 8 characters) and complexity (e.g., includes numbers or symbols).
+   - **Studio (optional):**
+     - A text input for users to specify their studio affiliation.
+   - **Upload Profile Picture (optional):**
+     - A file input for uploading an image.
+     - Validates file type (e.g., JPEG, PNG) and size limit (e.g., 2MB).
+   - **Manage Subscription (optional):**
+     - A link or button to navigate users to the subscription management page.
 
 2. **Submit Button:**
    - Submits the profile data.
@@ -34,8 +40,10 @@ The `ProfileForm` component allows users to create or update their profiles in M
    - Displays errors inline for invalid or missing fields.
 3. **Loading State:**
    - Disables the form and shows a spinner on the button during submission.
-4. **Inline Editing (Optional):**
-   - Allows users to edit their profile without leaving the form.
+4. **File Upload Handling:**
+   - Ensures the profile picture meets file type and size requirements.
+5. **Subscription Management Integration:**
+   - Provides a seamless redirect to manage subscription plans.
 
 ---
 
@@ -55,7 +63,8 @@ The `ProfileForm` component allows users to create or update their profiles in M
   initialValues={{
     name: "Jane Doe",
     handle: "@jane",
-    email: "jane@example.com"
+    email: "jane@example.com",
+    studio: "Pilates Studio XYZ",
   }}
   onSubmit={(profile) => console.log("Profile submitted:", profile)}
   isLoading={false}
@@ -113,6 +122,17 @@ The `ProfileForm` component allows users to create or update their profiles in M
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.profile-form .file-upload {
+  margin-top: 10px;
+}
+
+.profile-form .subscription-link {
+  color: #40E0D0;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 15px;
+}
 ```
 
 ---
@@ -124,12 +144,15 @@ The `ProfileForm` component allows users to create or update their profiles in M
     "name": "Jane Doe",
     "handle": "@jane",
     "email": "jane@example.com",
-    "password": "password123"
+    "password": "password123",
+    "studio": "Pilates Studio XYZ",
+    "profilePicture": "base64EncodedImageData"
   }
   ```
 - API should handle:
   - Validation errors (e.g., duplicate handles or invalid email).
-  - Authentication logic for updating sensitive fields like the password.
+  - File upload for profile pictures (store securely and return a URL).
+  - Linking the user profile to their subscription details.
 
 ---
 
@@ -138,11 +161,16 @@ The `ProfileForm` component allows users to create or update their profiles in M
    - Allows new users to create an account with required details.
 2. **Profile Editing:**
    - Enables existing users to update their profile information.
+3. **Studio Details:**
+   - Users can add their studio affiliation to personalize their profiles.
+4. **Manage Subscription:**
+   - Redirect users to a page to change or cancel their subscription.
 
 ---
 
 ### Notes for Developers
 - Ensure password input has proper encryption before being sent to the backend.
 - Add inline error messaging for invalid handles or emails (e.g., "This handle is already taken").
-- Consider adding optional features like "Upload Profile Picture."
+- Provide image optimization for uploaded profile pictures to reduce file size.
+- Ensure subscription management integrates seamlessly with the user profile page.
 
