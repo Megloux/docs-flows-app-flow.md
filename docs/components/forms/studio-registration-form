@@ -1,0 +1,192 @@
+# Studio Registration Form
+
+## Overview
+The `StudioRegistrationForm` allows studio owners to create or manage their studio account within Mosaic. This form captures essential details about the studio and enables owners to invite instructors, set permissions, and customize studio-specific templates.
+
+---
+
+## Form Structure
+1. **Studio Details:**
+   - **Studio Name (required):**
+     - A single-line text input for the studio's name.
+     - Validates that the name is not empty and is unique.
+   - **Studio Location (optional):**
+     - Text input or dropdown for city/state/country (can integrate with Google Maps API).
+   - **Studio Description (optional):**
+     - Multi-line text input for a short description of the studio (e.g., "High-intensity Pilates studio specializing in dynamic routines.").
+
+2. **Owner Information:**
+   - **Full Name (required):**
+     - Text input for the owner’s name.
+   - **Email (required):**
+     - Email input for the owner’s contact information.
+     - Validates for proper email format.
+   - **Password (required):**
+     - Password input field with a "Show/Hide" toggle for visibility.
+     - Validates minimum length and complexity.
+
+3. **Subscription Plan Selection:**
+   - Dropdown or radio buttons to select a studio-specific subscription tier (e.g., "Basic Studio", "Advanced Studio").
+
+4. **Instructor Invitations:**
+   - Allows the owner to invite instructors to join the studio.
+   - **Fields:**
+     - Instructor Email(s) (required): Text input with support for multiple email entries.
+     - Permissions: Checkbox or dropdown to set roles (e.g., Admin, Instructor, Viewer).
+   - Includes an "Add Another Instructor" button to dynamically add more fields.
+
+5. **Customization Options:**
+   - Options to upload the studio logo or branding.
+   - Toggle to allow instructors to share templates publicly or restrict sharing to the studio.
+
+6. **Submit Button:**
+   - Submits the form data to create the studio account.
+   - Includes a loading state during submission.
+
+---
+
+## Key Features
+1. **Validation:**
+   - Ensures all required fields are filled out.
+   - Validates unique studio name and proper email formats.
+2. **Dynamic Instructor Management:**
+   - Supports adding multiple instructors with role-based permissions.
+3. **Branding Options:**
+   - Allows studio owners to customize branding within the app.
+4. **Subscription Integration:**
+   - Tied to the backend to handle studio-specific subscription tiers.
+5. **Feedback Messaging:**
+   - Shows confirmation messages upon successful registration or errors if something goes wrong.
+
+---
+
+## Props
+
+| **Prop**          | **Type**   | **Default** | **Description**                            |
+|-------------------|------------|-------------|--------------------------------------------|
+| `initialValues`   | `object`   | `{}`        | Prefills the form for editing studio details. |
+| `onSubmit`        | `function` | `null`      | Callback triggered on form submission.     |
+| `isLoading`       | `boolean`  | `false`     | Indicates if the form is submitting.       |
+
+---
+
+## Example Implementation
+```javascript
+<StudioRegistrationForm
+  initialValues={{
+    studioName: "Dynamic Moves Studio",
+    ownerName: "John Doe",
+    ownerEmail: "john@example.com",
+    subscriptionTier: "Advanced Studio"
+  }}
+  onSubmit={(studioDetails) => handleStudioRegistration(studioDetails)}
+  isLoading={false}
+/>
+```
+
+---
+
+## CSS Requirements
+- **Wrapper**: Centered form with a max width of `600px`.
+- **Input Fields**:
+  - Border radius: `8px`.
+  - Padding: `10px`.
+  - Validation: Red border and error message for invalid fields.
+- **Instructor Invitation Fields:**
+  - Style dynamically added fields consistently with the rest of the form.
+
+```css
+.studio-registration-form {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  color: white;
+  font-family: "Julius Sans One", sans-serif;
+}
+
+.studio-registration-form .input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.studio-registration-form .error {
+  color: red;
+  font-size: 12px;
+}
+
+.studio-registration-form .submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #40E0D0;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.studio-registration-form .submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.studio-registration-form .dynamic-fields {
+  margin-bottom: 10px;
+}
+```
+
+---
+
+## Backend Integration Requirements
+1. **Create Studio:**
+   - API should accept studio details and create the account.
+   ```json
+   {
+     "studioName": "Dynamic Moves Studio",
+     "owner": {
+       "name": "John Doe",
+       "email": "john@example.com",
+       "password": "password123"
+     },
+     "location": "San Francisco, CA",
+     "subscriptionTier": "Advanced Studio",
+     "instructors": [
+       { "email": "jane@example.com", "role": "Instructor" },
+       { "email": "bob@example.com", "role": "Admin" }
+     ],
+     "branding": {
+       "logo": "base64encodedimage"
+     }
+   }
+   ```
+
+2. **Validate Studio Name:**
+   - API should check for duplicate studio names and return an error if the name already exists.
+
+3. **Invite Instructors:**
+   - API should send invitation emails to instructors with unique links to join the studio.
+
+4. **Subscription Integration:**
+   - API should link the selected subscription tier to the studio account.
+
+---
+
+## Use Cases
+1. **Studio Creation:**
+   - Owners can register their studio with all required details and invite instructors.
+2. **Instructor Management:**
+   - Owners can add multiple instructors with different roles during the registration process.
+3. **Studio Branding:**
+   - Owners can upload a logo or set preferences for their studio’s appearance.
+
+---
+
+### Notes for Developers
+- Ensure API endpoints for studio creation, validation, and subscription integration are secure.
+- Implement rate-limiting for studio registration to prevent abuse.
+- Provide clear feedback for duplicate studio names or invalid instructor emails.
+
