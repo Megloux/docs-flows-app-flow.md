@@ -1,8 +1,0 @@
-:root {
-  --font-primary: "Julius Sans One", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-* {
-  font-family: var(--font-primary);
-  -webkit-font-smoothing: antialiased;
-}
