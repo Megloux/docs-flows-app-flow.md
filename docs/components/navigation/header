@@ -1,1 +1,55 @@
+Great! Let's finish **Header** and **Menu**, then discuss if any additional navigation components might be needed.
+
+---
+
+### **Header Component**
+
+#### Overview:
+The `Header` component displays the app’s title or branding and can optionally include navigation controls like a back button, menu toggle, or additional actions (e.g., search).
+
+---
+
+#### Props:
+
+| **Prop**        | **Type**    | **Default**  | **Description**                                    |
+|------------------|-------------|--------------|----------------------------------------------------|
+| `title`         | `string`    | `""`         | Displays the title text in the header.            |
+| `showBack`      | `boolean`   | `false`      | Whether to include a back button in the header.   |
+| `onBackClick`   | `function`  | `null`       | Callback triggered when the back button is clicked.|
+| `showMenu`      | `boolean`   | `false`      | Whether to include a menu toggle in the header.   |
+| `onMenuClick`   | `function`  | `null`       | Callback triggered when the menu toggle is clicked.|
+| `customActions` | `node[]`    | `null`       | Array of custom JSX nodes (e.g., icons, buttons). |
+
+---
+
+#### Expected Behavior:
+- Displays a fixed header at the top of the screen.
+- Optionally includes a back button and/or a menu toggle.
+- Allows for custom actions (e.g., search, filters) to be added flexibly.
+
+---
+
+#### Example Implementation:
+```javascript
+import Header from './Header';
+
+<Header 
+  title="My App" 
+  showBack={true} 
+  onBackClick={() => console.log("Back clicked")} 
+  showMenu={true} 
+  onMenuClick={() => console.log("Menu clicked")} 
+  customActions={[
+    <button key="search">Search</button>,
+    <button key="filter">Filter</button>
+  ]}
+/>
+```
+
+---
+
+#### Notes for Developers:
+1. **Responsive Design**: Ensure the header layout adjusts properly for different screen sizes.
+2. **Custom Actions**: Include an accessible way to add dynamic actions or buttons.
+3. **Integration**: Back button behavior should match the `Back` component logic for consistency.
 
