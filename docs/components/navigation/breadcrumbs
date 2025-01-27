@@ -1,1 +1,47 @@
+### Breadcrumbs Component Documentation
 
+#### **Overview**
+The `Breadcrumbs` component displays the user's current location in the app and provides a simple way to navigate back to previous pages.
+
+---
+
+#### **Key Features**
+1. **Hierarchical Navigation:**
+   - Displays the full navigation path (e.g., Home > Library > Saved Routines).
+2. **Dynamic Path:**
+   - Updates based on the user’s navigation history.
+3. **Clickable Links:**
+   - Each breadcrumb is clickable, allowing users to jump to any prior section.
+
+---
+
+#### **Props**
+
+| **Prop**        | **Type**   | **Default** | **Description**                              |
+|-----------------|------------|-------------|----------------------------------------------|
+| `paths`         | `array`    | `[]`        | Array of objects representing breadcrumb links. |
+| `onClick`       | `function` | `null`      | Callback triggered when a breadcrumb is clicked.|
+
+---
+
+#### **Example Implementation**
+```javascript
+<Breadcrumbs
+  paths={[
+    { label: "Home", href: "/" },
+    { label: "Library", href: "/library" },
+    { label: "Saved Routines", href: "/library/saved" },
+  ]}
+  onClick={(path) => console.log("Navigating to:", path)}
+/>
+```
+
+---
+
+#### **CSS Notes**
+- Ensure breadcrumbs are visually separated (e.g., `>` or `/` as separators).
+- Truncate longer paths for smaller screens and show a tooltip for the full path.
+
+---
+
+Let me know if you'd like more refinements before you paste into GitHub! 😊
