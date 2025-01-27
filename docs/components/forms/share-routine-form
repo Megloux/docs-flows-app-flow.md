@@ -1,0 +1,125 @@
+
+# RoutineSharingForm Component
+
+## Overview
+The `RoutineSharingForm` component allows users to share routines directly within the Mosaic app. Recipients can access shared routines in their **Saved Routines** under the **"Shared" filter**.
+
+---
+
+## Form Structure
+
+1. **Fields:**
+   - **Recipient (required):**
+     - Input field with autocomplete functionality.
+     - Users can search for recipients by:
+       - Name.
+       - Handle (e.g., @username).
+       - Email.
+       - Phone number (linked to a Mosaic account).
+     - Dynamic suggestions populate as the user types.
+
+2. **Action Buttons:**
+   - **Share Routine:**
+     - Submits the form to share the routine.
+     - Includes a loading state during submission.
+   - **Cancel:**
+     - Closes the modal without sharing.
+
+---
+
+## Key Features
+
+1. **Autocomplete for Recipient Search:**
+   - Dynamically fetches and displays matching profiles as the user types.
+   - Highlights the selected recipient.
+
+2. **In-App Sharing:**
+   - Shares the routine directly within the app.
+   - Routine appears in the recipient's **Saved Routines** under the **"Shared" filter**.
+
+3. **Error Messaging:**
+   - Displays an error if the recipient field is left blank or if an invalid recipient is entered.
+
+4. **Confirmation Modal:**
+   - Confirms that the routine was successfully shared.
+
+5. **Minimal UI:**
+   - Clean and simple form design to streamline the sharing process.
+
+---
+
+## Props
+
+| **Prop**        | **Type**   | **Default** | **Description**                         |
+|-----------------|------------|-------------|-----------------------------------------|
+| `routineId`     | `string`   | `null`      | The ID of the routine being shared.     |
+| `onSubmit`      | `function` | `null`      | Callback triggered on form submission.  |
+| `onCancel`      | `function` | `null`      | Callback triggered when sharing is canceled. |
+| `isLoading`     | `boolean`  | `false`     | Indicates if the form is submitting.    |
+
+---
+
+
+---
+
+## Backend Integration Requirements
+
+### 1. **Fetch Recipient Suggestions:**
+   - API endpoint to return matching users based on the input.
+   ```json
+   {
+     "query": "@jane",
+     "results": [
+       { "id": "1", "name": "Jane Doe", "handle": "@jane" },
+       { "id": "2", "name": "Janet Smith", "handle": "@janets" }
+     ]
+   }
+   ```
+
+### 2. **Submit Sharing Request:**
+   - API endpoint to share the routine.
+   ```json
+   {
+     "routineId": "12345",
+     "recipientId": "1" // ID of the recipient
+   }
+   ```
+   - Response:
+   ```json
+   {
+     "success": true,
+     "message": "Routine shared successfully."
+   }
+   ```
+
+### 3. **Add to Saved Routines:**
+   - The backend should ensure the shared routine is added to the recipient’s **Saved Routines** under the **"Shared" filter**.
+
+### 4. **Error Handling:**
+   - API should return descriptive error messages for issues like:
+     - Invalid recipients.
+     - Failed sharing attempts.
+
+---
+
+## Use Cases
+
+1. **In-App Sharing Only:**
+   - Users share routines directly with others who have a Mosaic account.
+
+2. **Error-Free Sharing:**
+   - Ensures recipient details are valid before submission.
+
+3. **Access in Saved Routines:**
+   - Recipients can find shared routines in their **Saved Routines** under the **"Shared" filter** for easy access.
+
+---
+
+### Notes for Developers
+- **Recipient Search:** Ensure the search query is fast and responsive for large datasets.
+- **Routine Visibility:** Confirm shared routines are only visible to the recipient in the **"Shared" filter**.
+- **Error Messages:** Provide clear feedback if sharing fails or the recipient doesn’t exist in the system.
+
+---
+
+This version focuses entirely on **in-app sharing** and integrates with the **Saved Routines** structure seamlessly. Let me know if there’s anything else to tweak! 😊
