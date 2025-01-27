@@ -1,0 +1,221 @@
+# Subscription Management Form
+
+## Overview
+The `SubscriptionManagementForm` allows users to manage their Mosaic subscription through an interface similar to Spotify's account management. Users can view their current plan, change their subscription, update payment methods, or cancel their subscription.
+
+---
+
+## Form Structure
+### My Account Page
+1. **Current Plan Details:**
+   - Displays the user's current plan, including:
+     - Plan Name (e.g., "Pro Plan")
+     - Pricing (e.g., "$19.99/month")
+     - Renewal Date
+     - Included Features
+
+2. **Manage Plan Section:**
+   - Users can view and select other plans from a list or grid, showing:
+     - Plan Name (e.g., "Basic", "Pro", "Studio")
+     - Pricing (e.g., "$9.99/month", "$49.99/month")
+     - Key features of each plan
+     - Highlight of the current plan
+   - Includes "Change Plan" button.
+
+3. **Manage Payment Method Section:**
+ 
+   - Includes "Update Payment Method" button to redirect users to payment update form.
+
+4. **Cancel Subscription Section:**
+   - Includes "Cancel Subscription" button.
+   - Triggers a confirmation modal asking users to confirm cancellation.
+
+---
+
+## Key Features
+1. **Current Plan Overview:**
+   - Comprehensive display of the user's active subscription details.
+2. **Plan Comparison:**
+   - Allows users to explore and compare available subscription plans.
+3. **Seamless Plan Changes:**
+   - Users can easily upgrade or downgrade their subscription.
+4. **Payment Management:**
+   - Enables users to update or change their payment method securely.
+5. **Subscription Cancellation:**
+   - Users can cancel their subscription with a clear confirmation process.
+6. **Feedback Messaging:**
+   - Confirmation modals for actions like plan changes and cancellations.
+7. **Error Handling:**
+   - Inline error messages for failed actions.
+
+---
+
+## Props
+
+| **Prop**          | **Type**   | **Default** | **Description**                            |
+|-------------------|------------|-------------|--------------------------------------------|
+| `currentPlan`     | `object`   | `null`      | Details of the user's current plan.        |
+| `availablePlans`  | `array`    | `[]`        | List of plans available for selection.     |
+| `onPlanChange`    | `function` | `null`      | Callback triggered when the user changes their plan. |
+| `onPaymentUpdate` | `function` | `null`      | Callback triggered when payment details are updated. |
+| `onCancel`        | `function` | `null`      | Callback triggered when the user cancels their subscription. |
+| `isLoading`       | `boolean`  | `false`     | Indicates if an action is in progress.     |
+
+---
+
+## Example Implementation
+```javascript
+<SubscriptionManagementForm
+  currentPlan={{
+    name: "Pro Plan",
+    price: "$19.99/month",
+    renewalDate: "2025-02-15",
+    features: ["Feature 1", "Feature 2"]
+  }}
+  availablePlans={[
+    { name: "Basic", price: "$9.99/month", features: ["Feature A"] },
+    { name: "Studio", price: "$49.99/month", features: ["Feature X", "Feature Y"] }
+  ]}
+  onPlanChange={(newPlan) => handlePlanChange(newPlan)}
+  onPaymentUpdate={() => handlePaymentUpdate()}
+  onCancel={() => handleCancelSubscription()}
+  isLoading={false}
+/>
+```
+
+---
+
+## CSS Requirements
+- **Wrapper**: Centered form with a max width of `500px`.
+- **Plan List/Grid**:
+  - Each plan displayed in a card or grid format.
+  - Highlight the selected/current plan.
+- **Action Buttons:**
+  - "Change Plan", "Update Payment Method", and "Cancel Subscription" buttons styled consistently.
+- **Modals:**
+  - Styled to confirm actions (e.g., plan change or cancellation).
+
+```css
+.subscription-management-form {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  color: white;
+  font-family: "Julius Sans One", sans-serif;
+}
+
+.subscription-management-form .plan-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.subscription-management-form .plan-card.current {
+  border: 2px solid #40E0D0;
+}
+
+.subscription-management-form .action-button {
+  padding: 10px;
+  background-color: #40E0D0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.subscription-management-form .action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.subscription-management-form .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subscription-management-form .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+```
+
+---
+
+## Backend Integration Requirements
+1. **Fetch Current Plan Details:**
+   - API should return details of the user's current subscription.
+   ```json
+   {
+     "name": "Pro Plan",
+     "price": "$19.99/month",
+     "renewalDate": "2025-02-15",
+     "features": ["Feature 1", "Feature 2"]
+   }
+   ```
+
+2. **Fetch Available Plans:**
+   - API should return a list of available plans.
+   ```json
+   [
+     { "name": "Basic", "price": "$9.99/month", "features": ["Feature A"] },
+     { "name": "Studio", "price": "$49.99/month", "features": ["Feature X", "Feature Y"] }
+   ]
+   ```
+
+3. **Change Plan:**
+   - API should accept the new plan selection and process the change.
+   ```json
+   {
+     "newPlan": "Basic"
+   }
+   ```
+
+4. **Update Payment Method:**
+   - API should handle updating payment details.
+   ```json
+   {
+     "paymentMethod": "Visa ending in 1234"
+   }
+   ```
+
+5. **Cancel Subscription:**
+   - API should handle subscription cancellation requests.
+   ```json
+   {
+     "action": "cancel"
+   }
+   ```
+
+---
+
+## Use Cases
+1. **View Current Plan:**
+   - Users can view details of their existing subscription.
+2. **Change Plan:**
+   - Users can select a new plan and confirm the change.
+3. **Update Payment Method:**
+   - Users can modify their billing details securely.
+4. **Cancel Subscription:**
+   - Users can cancel their subscription with a confirmation step.
+
+---
+
+### Notes for Developers
+- Ensure all API endpoints are secure and validate user authentication.
+- Provide localized error messages for failed actions.
+- Test edge cases, such as downgrades that may involve prorated refunds or overlaps.
+
