@@ -1,0 +1,69 @@
+
+### **InfiniteScrolling Component Documentation**
+
+#### **Overview**
+The `InfiniteScrolling` component dynamically loads and appends content as users scroll. It replaces the traditional pagination model and ensures users have a smooth browsing experience.
+
+---
+
+#### **Key Features**
+1. **Dynamic Loading:**
+   - Fetches additional content when the user reaches a certain threshold (e.g., 80% scroll).
+2. **Performance Optimization:**
+   - Uses lazy loading to avoid loading unnecessary data upfront.
+3. **Error Handling:**
+   - Displays a retry button or error message if content fails to load.
+4. **"End of Content" Indicator:**
+   - Optionally displays a message when no more content is available.
+
+---
+
+#### **Props**
+
+| **Prop**          | **Type**   | **Default** | **Description**                               |
+|-------------------|------------|-------------|-----------------------------------------------|
+| `fetchData`       | `function` | `null`      | Callback function to fetch additional data.   |
+| `isLoading`       | `boolean`  | `false`     | Indicates whether new content is being loaded.|
+| `hasMoreContent`  | `boolean`  | `true`      | Signals if more content is available.         |
+| `error`           | `string`   | `null`      | Error message to display if content fails to load.|
+
+---
+
+#### **Example Implementation**
+```javascript
+<InfiniteScrolling
+  fetchData={() => fetchMoreRoutines()}
+  isLoading={false}
+  hasMoreContent={true}
+  error={null}
+/>
+```
+
+---
+
+#### **Event Handlers**
+1. **`onScroll`:**
+   - Detects when the user reaches the end of the current content and triggers `fetchData`.
+2. **`onRetry`:**
+   - Allows users to retry loading more content in case of an error.
+
+---
+
+#### **Backend Integration Requirements**
+- API should support paginated requests for routines (e.g., `/routines?page=2&limit=20`).
+- The API should return:
+  ```json
+  {
+    "results": [...], // List of routines
+    "hasMore": true   // Indicates if more data is available
+  }
+  ```
+
+---
+
+#### **Fallbacks**
+- If infinite scrolling fails, provide a "Load More" button as a backup.
+
+---
+
+�
