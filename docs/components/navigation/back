@@ -1,1 +1,54 @@
+Got it! Let’s tackle this step by step. I’ll create documentation for the **back**, **header**, and **menu** navigation components with the level of precision you need. Here’s what I’ll provide:
 
+1. A concise **overview** of each component.
+2. Detailed **props**, methods, and expected behaviors.
+3. Example **implementation** for context.
+4. Any relevant **backend integration** requirements (if applicable).
+5. Notes for ensuring consistent, reusable design.
+
+Let’s start with **Back**:
+
+---
+
+### **Back Component**
+
+#### Overview:
+The `Back` component is a reusable button for navigating to the previous page in the app. It handles navigation logic internally, ensuring the user is redirected to the correct page based on the app’s routing configuration.
+
+---
+
+#### Props:
+
+| **Prop**   | **Type**   | **Default** | **Description**                                             |
+|------------|------------|-------------|-------------------------------------------------------------|
+| `onClick`  | `function` | `null`      | Optional callback triggered when the back button is clicked.|
+| `label`    | `string`   | `"Back"`    | Optional label for accessibility or button text.            |
+
+---
+
+#### Expected Behavior:
+- Navigates to the previous screen based on the browser history stack or app’s routing.
+- Calls the `onClick` function (if provided) when the button is clicked.
+- Fails gracefully if there’s no navigation history (e.g., defaults to a fallback route).
+
+---
+
+#### Example Implementation:
+```javascript
+import Back from './Back';
+
+<Back 
+  onClick={() => console.log("Navigated back")} 
+  label="Go Back" 
+/>
+```
+
+---
+
+#### Notes for Developers:
+1. **Routing Logic**: Ensure this component integrates with the app’s routing system (e.g., React Router `useNavigate`).
+2. **Accessibility**: Add `aria-label` for screen readers, using either the `label` prop or default text.
+
+---
+
+Let me know if you’d like to proceed to **Header** or need adjustments for **Back** first!
