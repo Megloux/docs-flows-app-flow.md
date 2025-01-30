@@ -1,0 +1,46 @@
+# TimeInput Component Documentation
+## Overview
+The `TimeInput` component is a reusable React component designed for handling time duration inputs in `MM:SS` format. It works seamlessly in both custom routine building and template-based routines.
+## Props
+- **`value: string`** – The current time value in "MM:SS" format.
+- **`onChange: (value: string) => void`** – Callback function triggered when the time value changes.
+- **`defaultValue?: string`** – Optional prop to set an initial time value (useful for prefilled template routines).
+## Key Features
+1. **Controlled Component Pattern:**
+   - Implements React's controlled component pattern (`value` and `onChange` props).
+   - Parent components maintain state, providing full control over the input behavior.
+2. **Dynamic Time Formatting:**
+   - Automatically formats the input to **MM:SS**.
+   - Supports right-to-left number input handling.
+   - Ensures input validation to prevent incorrect values (e.g., negative numbers, non-numeric input).
+3. **Event Handling:**
+   - Prevents event propagation to avoid conflicts with parent elements.
+   - Handles both click and touch events for responsiveness.
+   - Maintains input focus across interactions.
+## Usage Examples
+**Custom Routine Builder (starts at `00:00`):**
+```tsx
+<TimeInput 
+  value={exercise.duration} 
+  onChange={(newTime) => handleDurationChange(newTime)} 
+/>
+```
+**Template Routine (prefilled with a suggested value):**
+```tsx
+<TimeInput 
+  value={exercise.duration} 
+  onChange={(newTime) => handleDurationChange(newTime)} 
+  defaultValue="02:00" 
+/>
+```
+## Styling
+The input is designed with a borderless appearance, achieved through these Tailwind CSS classes:
+```css
+w-full h-7 px-2 bg-transparent border-0 text-xs text-muted-foreground focus-visible:ring-0 font-modern text-center
+```
+## Implementation Details
+- Utilizes a `formatTimeInput` utility function for consistent string formatting.
+- Handles edge cases, such as:
+  - Empty input fields
+  - Invalid characters (non-numeric)
+  - Automatic correction for excessive digits
