@@ -1,0 +1,114 @@
+You're absolutely right! Here's an improved and polished version for the **TapToggle** component that aligns with the quality you expect:
+
+---
+
+### **Documentation for `TapToggle` Component**
+
+---
+
+### **Overview**
+The `TapToggle` component is a reusable circular button that toggles between two visual states. It is designed to provide intuitive, quick-switch functionality for different app contexts.
+
+This component will initially be used in two primary scenarios:
+1. **Exercise Library:**  
+   - Toggles between **Grid View** and **List View**.
+2. **Routine Builder:**  
+   - Toggles between **A (Assisted)** and **R (Resisted)** exercise modes.
+
+Both use cases require smooth animations, clear visual feedback, and easily configurable states.
+
+---
+
+### **Key Features**
+1. **Dual Toggle States:**
+   - The toggle supports two predefined states:
+     - **View Toggle:** Grid vs. List.
+     - **Mode Toggle:** Assisted (A) vs. Resisted (R).
+  
+2. **Interactive Design:**
+   - **Visual Feedback:** The toggle scales on tap/click.
+   - **Animations:** Smooth transition animations to provide a polished user experience.
+
+3. **Customizability:**  
+   - Props can be passed to define:
+     - Active and inactive states.
+     - Icons or labels for the two modes.
+     - Event handlers for analytics or state updates.
+
+---
+
+### **Props**
+
+| Prop         | Type                  | Description                              |
+|--------------|-----------------------|------------------------------------------|
+| `activeState`| `string`              | The current active state (`'grid' | 'list'`, `'A' | 'R'`, etc.) |
+| `labels`     | `{ A: string, R: string }` | Labels or icons to display for the states.|
+| `onToggle`   | `function`            | Callback triggered when the state changes.|
+| `persistState` | `boolean`           | If true, the state is saved in `localStorage`. |
+
+---
+
+### **Component Structure**
+1. **Wrapper:**  
+   - Contains the two toggle options (rendered as buttons).
+  
+2. **Toggle Buttons:**  
+   - Displays either text labels or icons for each state.  
+   - Applies dynamic active and inactive styles.
+
+---
+
+### **Styling and CSS**
+- **Base Style:** Circular button with animation and border.  
+- **Tailwind Utility Classes:**  
+```css
+w-8 h-8 rounded-full border transition-all duration-150
+hover:scale-110 cursor-pointer text-sm uppercase
+```
+- Active states have distinct colors:  
+  - **Grid View Active:** Blue highlight.
+  - **Assisted Active:** Emerald green text.  
+  - **Resisted Active:** Rose red text.
+
+---
+
+### **Example Usage**
+
+```tsx
+<TapToggle 
+  activeState="grid"
+  labels={{ grid: 'Grid', list: 'List' }}
+  onToggle={(newState) => console.log('Toggled to:', newState)}
+  persistState={true}
+/>
+```
+
+This will render a toggle between **Grid** and **List** views, with local storage persistence.
+
+---
+
+### **Use Cases**
+1. **Exercise Library:**  
+   - Toggle between Grid and List views for exercise browsing.
+2. **Routine Builder:**  
+   - Toggle between **Assisted (A)** and **Resisted (R)** modes during routine creation.
+
+---
+
+### **Future Enhancements**
+- Allow more than two states for additional flexibility.
+- Support customizable animations and icon overrides.
+
+---
+
+### **Location**
+This component documentation should be placed in **`docs/components/toggles/TapToggle.md`**.
+
+---
+
+### **Commit Message**
+"Add TapToggle documentation for toggle functionality in Exercise Library and Routine Builder"
+
+---
+
+This version maintains clarity, precision, and a developer-friendly tone! Let me know if this works! 😊
