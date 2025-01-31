@@ -1,10 +1,10 @@
- Component Documentation
+# Component Documentation
 
 ## RoutineBuilder Component Architecture
 
 ### Overview
 The RoutineBuilder implements a modular workout routine builder with:
-- Real-time timer preview
+- Real-time timer preview with dynamic color feedback
 - Multi-select operations (Spotify-style)
 - Drag-and-drop exercise reordering
 - Resistance training toggles
@@ -28,7 +28,10 @@ RoutineBuilder (Container)
 │       ├── TimerDisplay
 │       │   ├── CurrentExercise
 │       │   ├── ResistanceIndicator
-│       │   ├── TimeRemaining
+│       │   ├── TimeRemaining (with color states)
+│       │   │   ├── Default state
+│       │   │   ├── Warning state (≤20s)
+│       │   │   └── Final countdown state (≤3s)
 │       │   └── NextExercise
 │       └── TimerControls
 │           ├── Start/Pause
@@ -69,8 +72,15 @@ Core States:
 └── Timer State
     ├── currentExercise
     ├── timeRemaining
-    └── timerStatus
+    ├── timerStatus
+    └── timeColorState
 ```
+
+### Timer Color States
+The timer implements dynamic color feedback based on remaining time:
+- Default: Normal state (>20s remaining)
+- Warning: Red text (≤20s remaining)
+- Final: White text (≤3s remaining)
 
 ### Data Flow
 1. User Actions → Component Events
@@ -82,11 +92,12 @@ Core States:
 ### Key Features
 - Multi-select operations (Spotify-style)
 - Drag-and-drop reordering
-- Real-time timer preview
+- Real-time timer preview with visual feedback
 - Exercise library integration
 - Manual exercise entry
 - Resistance training toggles
 - Exercise orientation tracking
+- Dynamic timer color states
 
 ### Component Communication
 Parent → Child:
@@ -117,6 +128,7 @@ Child → Parent:
 - Screen reader support
 - ARIA labels
 - Focus management
+- Color contrast considerations for timer states
 
 ### Future Extensions
 - Exercise templates
@@ -124,18 +136,3 @@ Child → Parent:
 - Analytics
 - Offline mode
 - Multi-device sync
-
-not sure where to put this but i love it!!
-
-// Inside CustomRoutineTimer.tsx
-
-const getTimeColor = (seconds: number): string => {
-  if (seconds <= 3) return 'text-white';
-  if (seconds <= 20) return 'text-red-500';
-  return '';
-};
-
-// This function is used in the TimerDisplay component like:
-<p className={`font-display tracking-[0.3em] text-4xl ${getTimeColor(timeRemaining)}`}>
-  {formatTime(timeRemaining)}
-</p>
