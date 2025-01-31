@@ -1,292 +1,258 @@
 # ShareButton Component
 
-The ShareButton extends StandardButton to provide a unified sharing experience across Mosaic. It intelligently handles sharing through the Web Share API when available, with graceful fallbacks to a custom share menu. The component supports sharing exercises, routines, and programs while maintaining consistent behavior across desktop and mobile platforms.
+The ShareButton enables instructors to share routines with other Mosaic users through a searchable dialog interface. It provides immediate feedback and handles loading and error states gracefully.
 
 ## Interface
 
 ```typescript
-interface ShareButtonProps extends Omit<StandardButtonProps, 'variant' | 'children'> {
-  /** Unique identifier for the shared item */
-  itemId: string;
+interface ShareButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** ID of the routine being shared */
+  routineId: string;
   
-  /** Type of content being shared */
-  itemType: 'exercise' | 'routine' | 'program';
+  /** Called when sharing completes successfully */
+  onShareComplete?: () => void;
   
-  /** Title for sharing */
-  shareTitle: string;
-  
-  /** Optional description for sharing */
-  shareDescription?: string;
-  
-  /** Custom URL for sharing (defaults to current item URL) */
-  shareUrl?: string;
-  
-  /** Callback when share is completed successfully */
-  onShareSuccess?: () => void;
-  
-  /** Callback when share encounters an error */
-  onShareError?: (error: Error) => void;
-  
-  /** Custom share platforms to include */
-  platforms?: SharePlatform[];
-  
-  /** Whether to show share count */
-  showShareCount?: boolean;
+  /** Optional style overrides */
+  className?: string;
 }
-
-type SharePlatform = 'whatsapp' | 'email' | 'copy' | 'notes';
 ```
 
-## Design Implementation
+## Core Features
 
-### Typography and Visual Design
+The component provides:
+- User search by name, handle, or phone number
+- Clear loading and error states
+- Toast notifications for feedback
+- Full keyboard navigation support
+- Mobile-optimized interface
+
+## Implementation
+
 ```typescript
-const shareButtonStyles = cn(
-  // Inherit StandardButton base styles
-  buttonStyles,
-  
-  // Share-specific styling
-  "relative group",
-  
-  // Platform-specific colors on hover
-  "hover:bg-primary/10",
-  
-  // Menu positioning
-  "inline-flex items-center",
-  
-  // Share count badge
-  showShareCount && "pr-8",
-  
-  // Active state
-  "active:scale-95",
-  
-  // Disabled state
-  "disabled:opacity-50"
-);
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Share2, Loader2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
-const shareMenuStyles = cn(
-  // Menu positioning and layout
-  "absolute top-full mt-2 right-0",
-  "bg-white dark:bg-gray-800",
-  "rounded-lg shadow-lg",
-  "border border-border",
-  
-  // Animation
-  "origin-top-right",
-  "transition-all duration-200",
-  
-  // States
-  "invisible opacity-0 scale-95",
-  "group-hover:visible group-hover:opacity-100 group-hover:scale-100"
-);
-```
+export const ShareButton: React.FC<ShareButtonProps> = ({
+  routineId,
+  onShareComplete,
+  className,
+  ...props
+}) => {
+  // State management
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [isSharing, setIsSharing] = React.useState(false);
+  const { toast } = useToast();
 
-### Motion Design
-```typescript
-// Share success animation
-const successAnimation = {
-  initial: { scale: 1 },
-  animate: { 
-    scale: [1, 1.2, 1],
-    transition: { duration: 0.3 }
-  }
-};
-
-// Menu transition
-const menuAnimation = {
-  initial: { opacity: 0, y: -10 },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-    transition: {
-      duration: 0.2,
-      ease: 'easeOut'
+  // Handle share action
+  const handleShare = async () => {
+    if (!searchQuery.trim()) {
+      toast({
+        title: "Please enter a search term",
+        variant: "destructive",
+      });
+      return;
     }
-  },
-  exit: { 
-    opacity: 0,
-    y: -10,
-    transition: {
-      duration: 0.15
+
+    setIsSharing(true);
+    try {
+      // Your sharing implementation here
+      await shareRoutine(routineId, searchQuery);
+      
+      toast({
+        title: "Routine shared",
+        description: "The routine has been shared successfully.",
+      });
+
+      onShareComplete?.();
+    } catch (error) {
+      toast({
+        title: "Error sharing routine",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSharing(false);
     }
-  }
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "relative group p-2",
+            "hover:bg-accent hover:text-accent-foreground",
+            className
+          )}
+          aria-label="Share routine"
+          {...props}
+        >
+          <Share2 className="w-5 h-5" />
+        </Button>
+      </DialogTrigger>
+      
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="text-center">Share Routine</DialogTitle>
+        </DialogHeader>
+        
+        <div className="grid gap-4 py-4">
+          <Input
+            placeholder="Search by name, handle, or phone number..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="col-span-3"
+            disabled={isSharing}
+            aria-label="Search users"
+          />
+          
+          <Button 
+            onClick={handleShare} 
+            className="w-full"
+            disabled={isSharing}
+          >
+            {isSharing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sharing...
+              </>
+            ) : (
+              'Share Routine'
+            )}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 };
 ```
-
-## Accessibility Features
-
-1. Keyboard Navigation
-   ```typescript
-   // Menu keyboard navigation
-   const handleKeyboardNav = (e: KeyboardEvent) => {
-     switch(e.key) {
-       case 'ArrowDown':
-         // Focus next platform option
-         focusNextPlatform();
-         break;
-       case 'ArrowUp':
-         // Focus previous platform option
-         focusPrevPlatform();
-         break;
-       case 'Escape':
-         // Close menu
-         closeShareMenu();
-         break;
-     }
-   };
-   ```
-
-2. Screen Reader Support
-   ```typescript
-   // Dynamic ARIA labels
-   const getAriaLabel = () => {
-     if (isMenuOpen) return `Close share menu for ${shareTitle}`;
-     return `Share ${itemType}: ${shareTitle}`;
-   };
-   ```
-
-3. Touch Optimization
-   - Larger touch targets for platform options
-   - Clear visual feedback
-   - Haptic feedback on share success
 
 ## Usage Examples
 
-```typescript
-// Basic Implementation
-<ShareButton
-  itemId="exercise-123"
-  itemType="exercise"
-  shareTitle="Morning Pilates Routine"
-/>
+```tsx
+// Basic usage
+<ShareButton routineId="routine-123" />
 
-// With Custom Share Options
-<ShareButton
-  itemId="routine-456"
-  itemType="routine"
-  shareTitle="Advanced Core Workout"
-  shareDescription="A 30-minute advanced core routine"
-  platforms={['whatsapp', 'email']}
-  showShareCount
-  onShareSuccess={() => trackShareEvent('routine-456')}
+// With success callback
+<ShareButton 
+  routineId="routine-123"
+  onShareComplete={() => {
+    // Handle successful share
+    refetchRoutines();
+  }}
 />
-
-// Within Exercise Card
-<ExerciseCard>
-  <ShareButton
-    itemId={exercise.id}
-    itemType="exercise"
-    shareTitle={exercise.name}
-    shareDescription={exercise.description}
-  />
-</ExerciseCard>
 ```
 
 ## Testing
 
 ```typescript
-describe('ShareButton', () => {
-  describe('Rendering', () => {
-    it('renders with default platforms', () => {
-      render(
-        <ShareButton
-          itemId="test-123"
-          itemType="exercise"
-          shareTitle="Test Exercise"
-        />
-      );
-      expect(screen.getByRole('button')).toBeInTheDocument();
-    });
-
-    it('shows correct platforms based on props', () => {
-      render(
-        <ShareButton
-          itemId="test-123"
-          itemType="exercise"
-          shareTitle="Test Exercise"
-          platforms={['whatsapp', 'email']}
-        />
-      );
-      
-      fireEvent.click(screen.getByRole('button'));
-      expect(screen.getByText('WhatsApp')).toBeInTheDocument();
-      expect(screen.getByText('Email')).toBeInTheDocument();
-    });
+describe("ShareButton", () => {
+  const mockShareRoutine = jest.fn();
+  
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  describe('Web Share API', () => {
-    it('uses Web Share API when available', async () => {
-      const mockShare = jest.fn();
-      global.navigator.share = mockShare;
-
-      render(
-        <ShareButton
-          itemId="test-123"
-          itemType="exercise"
-          shareTitle="Test Exercise"
-        />
-      );
-      
-      await userEvent.click(screen.getByRole('button'));
-      expect(mockShare).toHaveBeenCalled();
-    });
-
-    it('falls back to menu when Web Share API is unavailable', async () => {
-      delete global.navigator.share;
-
-      render(
-        <ShareButton
-          itemId="test-123"
-          itemType="exercise"
-          shareTitle="Test Exercise"
-        />
-      );
-      
-      await userEvent.click(screen.getByRole('button'));
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-    });
+  it("renders with correct accessibility attributes", () => {
+    render(<ShareButton routineId="test-123" />);
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-label", 
+      "Share routine"
+    );
   });
 
-  describe('Share Count', () => {
-    it('displays share count when enabled', () => {
-      render(
-        <ShareButton
-          itemId="test-123"
-          itemType="exercise"
-          shareTitle="Test Exercise"
-          showShareCount
-        />
-      );
-      
-      expect(screen.getByText(/[0-9]+/)).toBeInTheDocument();
-    });
+  it("displays and handles search input", async () => {
+    render(<ShareButton routineId="test-123" />);
+    
+    // Open dialog
+    await userEvent.click(screen.getByRole("button"));
+    
+    // Find and interact with search
+    const search = screen.getByRole("textbox");
+    await userEvent.type(search, "John");
+    
+    expect(search).toHaveValue("John");
+  });
+
+  it("handles successful share", async () => {
+    const onShareComplete = jest.fn();
+    mockShareRoutine.mockResolvedValueOnce(undefined);
+
+    render(
+      <ShareButton 
+        routineId="test-123" 
+        onShareComplete={onShareComplete}
+      />
+    );
+    
+    // Complete share flow
+    await userEvent.click(screen.getByRole("button"));
+    await userEvent.type(screen.getByRole("textbox"), "John");
+    await userEvent.click(screen.getByText("Share Routine"));
+    
+    // Verify results
+    expect(mockShareRoutine).toHaveBeenCalledWith("test-123", "John");
+    expect(onShareComplete).toHaveBeenCalled();
+  });
+
+  it("handles errors appropriately", async () => {
+    mockShareRoutine.mockRejectedValueOnce(new Error("Share failed"));
+
+    render(<ShareButton routineId="test-123" />);
+    
+    // Attempt share
+    await userEvent.click(screen.getByRole("button"));
+    await userEvent.type(screen.getByRole("textbox"), "John");
+    await userEvent.click(screen.getByText("Share Routine"));
+    
+    // Verify error handling
+    expect(screen.getByText("Share failed")).toBeInTheDocument();
+  });
+
+  it("manages loading state correctly", async () => {
+    mockShareRoutine.mockImplementationOnce(() => 
+      new Promise(resolve => setTimeout(resolve, 100))
+    );
+
+    render(<ShareButton routineId="test-123" />);
+    
+    // Start share process
+    await userEvent.click(screen.getByRole("button"));
+    await userEvent.type(screen.getByRole("textbox"), "John");
+    await userEvent.click(screen.getByText("Share Routine"));
+    
+    // Verify loading state
+    expect(screen.getByText("Sharing...")).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toBeDisabled();
   });
 });
 ```
 
 ## Best Practices
 
-1. Usage Guidelines
-   - Use consistently across shareable content
-   - Implement platform-specific sharing when available
-   - Provide appropriate fallbacks
-   - Handle offline state gracefully
+1. Implementation Guidelines:
+   - Always show loading states during share operations
+   - Validate search input before sharing
+   - Provide clear feedback for success and errors
+   - Handle offline states appropriately
+   - Maintain keyboard navigation support
 
-2. Content Guidelines
-   - Create clear, engaging share text
-   - Include relevant context in shares
-   - Use appropriate platform-specific formatting
-   - Maintain brand voice in share content
-
-3. Layout Considerations
-   - Position share menu appropriately
-   - Consider mobile screen constraints
-   - Maintain touch-friendly targets
-   - Ensure menu visibility
-
-4. Performance
-   - Lazy load platform-specific code
-   - Optimize share preview images
-   - Cache share counts
-   - Handle rate limiting
-   - Monitor share analytics
+2. Accessibility Considerations:
+   - Use proper ARIA labels
+   - Maintain focus management
+   - Announce status changes
+   - Support screen readers
+   - Ensure keyboard navigation
