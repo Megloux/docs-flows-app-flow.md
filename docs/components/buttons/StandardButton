@@ -1,100 +1,248 @@
 # StandardButton Component
 
-## Variants & States
+The StandardButton serves as Mosaic's foundational button component, implementing our design system's interactive patterns with a focus on accessibility and user experience. Built on shadcn/ui's Button component, it provides a consistent, accessible interface across both desktop and mobile platforms.
 
-### Primary Button
-- Hairline white border (0.5px)
-- Black background
-- White text in Julius Sans One
-- Hover: Turquoise glow + border color change
-- Active: Stronger glow + 95% scale
+## Interface
 
-### Secondary Button
-- Hairline dark border (0.5px)
-- Other properties match Primary
-
-## CSS Specifications
-```css
-.button-base {
-  border-width: 0.5px;
-  border-radius: 8px;
-  padding: 16px;
-  transition: all 150ms;
+```typescript
+interface StandardButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Content displayed within the button */
+  children: React.ReactNode;
+  
+  /** Click event handler */
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  
+  /** Visual style variant */
+  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
+  
+  /** Size variant - all sizes maintain minimum touch targets */
+  size?: 'default' | 'sm' | 'lg';
+  
+  /** Shows loading spinner and disables interactions */
+  loading?: boolean;
+  
+  /** Disables all interactions */
+  disabled?: boolean;
+  
+  /** Expands button to container width */
+  fullWidth?: boolean;
+  
+  /** Button's form submission behavior */
+  type?: 'button' | 'submit' | 'reset';
+  
+  /** Additional CSS classes */
+  className?: string;
+  
+  /** Lucide icon component */
+  icon?: React.ReactNode;
+  
+  /** Icon placement relative to text */
+  iconPosition?: 'left' | 'right';
 }
+```
 
-.button-hover {
-  box-shadow: 0 0 15px rgba(64,224,208,0.5);
-  border-color: #40E0D0;
-}
+## Design Implementation
 
-.button-active {
-  box-shadow: 0 0 20px rgba(64,224,208,0.7);
-  transform: scale(0.95);
-}
-implimentetaion example: 
+Our StandardButton implements Mosaic's design specifications while ensuring optimal performance and accessibility.
 
-import React, { useState } from 'react';
+### Typography and Visual Design
+```typescript
+const buttonStyles = cn(
+  // Core Typography
+  "font-modern font-medium tracking-wider",
+  "text-base leading-normal",
+  
+  // Base Styling
+  "rounded-md border-0",
+  "transition-all duration-200",
+  "focus-visible:outline-none focus-visible:ring-2",
+  
+  // Size Variants - Maintaining Touch Targets
+  size === 'default' && "h-11 px-4 py-2 min-w-[44px]",
+  size === 'sm' && "h-9 px-3 text-sm min-w-[44px]",
+  size === 'lg' && "h-14 px-6 text-lg min-w-[44px]",
+  
+  // Visual Variants
+  variant === 'default' && [
+    "bg-primary text-primary-foreground",
+    "hover:bg-primary/90",
+    "active:scale-[0.98]"
+  ],
+  variant === 'secondary' && [
+    "bg-secondary text-secondary-foreground",
+    "hover:bg-secondary/80"
+  ],
+  variant === 'destructive' && [
+    "bg-destructive text-destructive-foreground",
+    "hover:bg-destructive/90"
+  ],
+  
+  // States
+  "disabled:opacity-50 disabled:pointer-events-none",
+  loading && "opacity-80 cursor-wait",
+  fullWidth && "w-full"
+);
+```
 
-const ButtonExamples = () => {
-  const [isHovered1, setIsHovered1] = useState(false);
-  const [isHovered2, setIsHovered2] = useState(false);
-  const [isPressed1, setIsPressed1] = useState(false);
-  const [isPressed2, setIsPressed2] = useState(false);
+### Motion Design
+We implement subtle, performant animations that provide clear feedback without sacrificing responsiveness:
 
-  return (
-    <div className="space-y-8 p-8 bg-black">
-      <button 
-        className={`w-full bg-black text-white py-4 rounded-lg border-[0.5px] border-white transition-all duration-150 uppercase tracking-wider font-primary ${
-          isHovered1 ? 'border-[#40E0D0]' : ''
-        } ${
-          isPressed1 ? 'scale-95' : ''
-        }`}
-        style={{
-          boxShadow: isHovered1 ? '0 0 15px rgba(64,224,208,0.5)' : 'none',
-          boxShadow: isPressed1 ? '0 0 20px rgba(64,224,208,0.7)' : ''
-        }}
-        onMouseEnter={() => setIsHovered1(true)}
-        onMouseLeave={() => setIsHovered1(false)}
-        onMouseDown={() => setIsPressed1(true)}
-        onMouseUp={() => setIsPressed1(false)}
-      >
-        CREATE ROUTINE
-      </button>
+```typescript
+// Base transitions
+"transition-all duration-200 ease-out",
 
-      <button 
-        className={`w-full bg-black text-white py-4 rounded-lg border-[0.5px] border-gray-800 transition-all duration-150 uppercase tracking-wider font-primary ${
-          isHovered2 ? 'border-[#40E0D0]' : ''
-        } ${
-          isPressed2 ? 'scale-95' : ''
-        }`}
-        style={{
-          boxShadow: isHovered2 ? '0 0 15px rgba(64,224,208,0.5)' : 'none',
-          boxShadow: isPressed2 ? '0 0 20px rgba(64,224,208,0.7)' : ''
-        }}
-        onMouseEnter={() => setIsHovered2(true)}
-        onMouseLeave={() => setIsHovered2(false)}
-        onMouseDown={() => setIsPressed2(true)}
-        onMouseUp={() => setIsPressed2(false)}
-      >
-        BROWSE TEMPLATES
-      </button>
-    </div>
-  );
-};
+// Interactive States
+"hover:scale-[1.02] active:scale-[0.98]",
 
-export default ButtonExamples;
+// Loading State Animation
+loading && "animate-pulse"
+```
 
+## Accessibility Features
 
-## Props for Button Component
+StandardButton implements comprehensive accessibility features:
 
-| **Prop**       | **Type**                          | **Default**   | **Description**                                      |
-|-----------------|-----------------------------------|---------------|-----------------------------------------------------|
-| `text`         | `string`                         | `""`          | Button label text (e.g., "Save Routine").           |
-| `onClick`      | `function`                       | `undefined`   | Action triggered when the button is clicked.        |
-| `size`         | `"small" | "medium" | "large"`  | `"medium"`   | Controls the button size.                           |
-| `disabled`     | `boolean`                        | `false`       | Disables the button and applies a disabled style.   |
-| `loading`      | `boolean`                        | `false`       | Shows a loading indicator instead of the label.     |
-| `icon`         | `ReactNode`                      | `null`        | Adds an icon before or after the label.             |
-| `type`         | `"button" | "submit" | "reset"`  | `"button"`   | Specifies the HTML button type.                    |
-| `fullWidth`    | `boolean`                        | `false`       | Expands the button to fill the container width.     |
-| `className`    | `string`                         | `""`          | Adds custom CSS classes for additional styling.     |
+1. Keyboard Navigation
+   - Full keyboard focus support
+   - Clear focus indicators
+   - Proper tab order maintenance
+
+2. Screen Reader Support
+   - Meaningful ARIA labels
+   - Loading state announcements
+   - Error state notifications
+
+3. Touch Optimization
+   - 44x44px minimum touch targets
+   - Clear hover and active states
+   - Appropriate touch feedback
+
+## Usage Examples
+
+Here are common implementation patterns for StandardButton:
+
+```typescript
+// Primary Action Button
+<StandardButton 
+  variant="default"
+  onClick={handleSubmit}
+  loading={isSubmitting}
+>
+  Save Changes
+</StandardButton>
+
+// Secondary Action with Icon
+<StandardButton 
+  variant="secondary"
+  icon={<ShareIcon />}
+  iconPosition="left"
+>
+  Share Workout
+</StandardButton>
+
+// Danger Action
+<StandardButton 
+  variant="destructive"
+  onClick={handleDelete}
+  disabled={!canDelete}
+>
+  Delete Routine
+</StandardButton>
+
+// Form Submit Button
+<StandardButton 
+  type="submit"
+  fullWidth
+  loading={isSubmitting}
+>
+  {isSubmitting ? 'Creating...' : 'Create Program'}
+</StandardButton>
+```
+
+## Testing
+
+Our testing strategy ensures reliability across all use cases:
+
+```typescript
+describe('StandardButton', () => {
+  describe('Rendering', () => {
+    it('renders all variants correctly', () => {
+      const variants = ['default', 'secondary', 'destructive'];
+      variants.forEach(variant => {
+        const { container } = render(
+          <StandardButton variant={variant}>
+            Test Button
+          </StandardButton>
+        );
+        expect(container).toMatchSnapshot();
+      });
+    });
+  });
+
+  describe('Interaction', () => {
+    it('handles click events properly', async () => {
+      const handleClick = jest.fn();
+      render(
+        <StandardButton onClick={handleClick}>
+          Click Me
+        </StandardButton>
+      );
+      
+      await userEvent.click(screen.getByRole('button'));
+      expect(handleClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('prevents interaction when loading', async () => {
+      const handleClick = jest.fn();
+      render(
+        <StandardButton loading onClick={handleClick}>
+          Loading
+        </StandardButton>
+      );
+      
+      await userEvent.click(screen.getByRole('button'));
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('maintains accessibility standards', async () => {
+      const { container } = render(
+        <StandardButton>Accessible Button</StandardButton>
+      );
+      
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+  });
+});
+```
+
+## Best Practices
+
+When implementing StandardButton, follow these guidelines:
+
+1. Action Hierarchy
+   Use appropriate variants for different action types:
+   - 'default' for primary actions
+   - 'secondary' for alternative choices
+   - 'destructive' for dangerous operations
+   - 'link' for navigation-like actions
+
+2. Content Guidelines
+   - Use clear, action-oriented text
+   - Keep labels concise but descriptive
+   - Include loading state messages
+   - Maintain consistent terminology
+
+3. Layout Considerations
+   - Group related buttons logically
+   - Maintain consistent spacing
+   - Use fullWidth thoughtfully
+   - Consider mobile viewports
+
+4. Performance
+   - Avoid rapid state changes
+   - Debounce quick clicks
+   - Handle loading states gracefully
+   - Manage memory efficiently
