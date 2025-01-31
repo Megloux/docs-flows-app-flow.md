@@ -1,0 +1,94 @@
+Let me explain how a parent RoutineBuilder component would organize all these Spotify-like features in a clean, modular way:
+
+
+RoutineBuilder (Parent Component)
+│
+├── TopSection
+│   ├── SaveButton (top right)
+│   ├── TimerDisplay (center)
+│   └── RoutineName (below timer)
+│
+├── ActionBar
+│   ├── FavoriteButton
+│   └── ShareButton
+│
+├── ExerciseList (Main Content)
+│   └── ExerciseItem (For each exercise)
+│       ├── SelectBubble (left)
+│       ├── DragHandle
+│       ├── ExerciseName
+│       ├── ToggleSwitch
+│       └── TimeInput (right)
+│
+└── BottomActions
+    ├── CopyButton
+    ├── PasteButton
+    └── DeleteButton
+Here's how the parent component would manage everything:
+
+State Management:
+
+// Core states in parent
+const [exercises, setExercises] = useState<Exercise[]>([]);
+const [selectedExercises, setSelectedExercises] = useState<number[]>([]);
+const [clipboard, setClipboard] = useState<Exercise[]>([]);
+const [routineName, setRoutineName] = useState('');
+const [isFavorite, setIsFavorite] = useState(false);
+Data Flow:
+Parent passes down data and callbacks to children
+Children emit events up to parent
+Parent coordinates between components
+Feature Organization:
+a) Top Section:
+
+SaveButton gets onSave callback
+TimerDisplay gets current exercise/time
+RoutineName gets name and update function
+b) Exercise Management:
+
+DragDropContext wraps list for reordering
+Each exercise item gets:
+Selection handlers
+Toggle state
+Time update callbacks
+Drag handlers
+c) Bottom Actions:
+
+Enabled/disabled based on selection state
+Handle clipboard operations
+Manage bulk actions
+Key Interactions:
+
+// Selection
+const handleSelect = (id: number) => {
+  setSelectedExercises(prev => [...prev, id]);
+}
+
+// Drag and Drop
+const handleReorder = (result: DropResult) => {
+  // Update exercise order
+}
+
+// Clipboard
+const handleCopy = () => {
+  const copied = exercises.filter((_, i) => selectedExercises.includes(i));
+  setClipboard(copied);
+}
+Infinite Scroll:
+Uses intersection observer
+Loads more exercises as needed
+Maintains smooth performance
+The benefits of this organization:
+
+Clear separation of concerns
+Predictable data flow
+Reusable components
+Easy state management
+Maintainable code structure
+Each child component stays focused on its specific task while the parent:
+
+Coordinates all interactions
+Manages shared state
+Handles complex operations
+Maintains data consistency
+Would you like me to elaborate on any specific part of this organization or show how any particular component would be implemented?
