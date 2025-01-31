@@ -124,3 +124,18 @@ Child → Parent:
 - Analytics
 - Offline mode
 - Multi-device sync
+
+not sure where to put this but i love it!!
+
+// Inside CustomRoutineTimer.tsx
+
+const getTimeColor = (seconds: number): string => {
+  if (seconds <= 3) return 'text-white';
+  if (seconds <= 20) return 'text-red-500';
+  return '';
+};
+
+// This function is used in the TimerDisplay component like:
+<p className={`font-display tracking-[0.3em] text-4xl ${getTimeColor(timeRemaining)}`}>
+  {formatTime(timeRemaining)}
+</p>
