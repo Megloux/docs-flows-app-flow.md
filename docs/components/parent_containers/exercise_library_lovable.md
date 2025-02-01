@@ -1,5 +1,8 @@
-src/docs/components/ExerciseLibraryComplete.md
+docs/components/ExerciseLibraryComplete.md
 # ExerciseLibrary Component Documentation
+
+## Overview
+The ExerciseLibrary component serves as the primary interface for browsing, filtering, and managing exercise content. It implements a responsive, accessible interface supporting both grid and list views, with advanced filtering and categorization capabilities.
 
 ## Component Architecture
 
