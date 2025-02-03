@@ -1,0 +1,181 @@
+Minor Suggestions (Optional)
+Image Loading States
+Consider documenting or implementing a loading skeleton or fallback for slow networks.
+
+Testing Edge Cases
+Expand tests to cover:
+
+Scenarios where the thumbnail URL is invalid or fails to load.
+Cases where no onSelect handler is provided (should fail gracefully).
+
+
+# ExerciseCard Component
+
+## Purpose
+Displays an exercise preview with a Vimeo thumbnail and title. When clicked, triggers the display of exercise details in a modal. Built on BaseCard to maintain consistent interaction patterns and iOS compatibility.
+
+## Props
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| exerciseId | string | Yes | - | Unique identifier for the exercise |
+| title | string | Yes | - | Exercise name displayed below thumbnail |
+| thumbnailUrl | string | Yes | - | Vimeo thumbnail URL |
+| onSelect | () => void | Yes | - | Called when card is clicked/tapped |
+| className | string | No | '' | Custom styling classes |
+
+## Interface
+```typescript
+interface ExerciseCardProps extends Omit<BaseCardProps, 'interactive' | 'children'> {
+  /** Unique identifier for the exercise */
+  exerciseId: string;
+  
+  /** Exercise name */
+  title: string;
+  
+  /** Vimeo thumbnail URL */
+  thumbnailUrl: string;
+  
+  /** Handler for when card is selected */
+  onSelect: () => void;
+}
+```
+
+## Usage
+
+### Basic Example
+```tsx
+<ExerciseCard
+  exerciseId="push-ups-101"
+  title="Push-ups"
+  thumbnailUrl="https://vimeo.com/thumbnail/123"
+  onSelect={() => openExerciseModal('push-ups-101')}
+/>
+```
+
+## Implementation
+```tsx
+const ExerciseCard: React.FC<ExerciseCardProps> = ({
+  exerciseId,
+  title,
+  thumbnailUrl,
+  onSelect,
+  className,
+  ...props
+}) => {
+  // Handle touch feedback
+  const handleTouchStart = useCallback(() => {
+    if (window?.navigator?.vibrate) {
+      window.navigator.vibrate(10);
+    }
+  }, []);
+
+  return (
+    <BaseCard
+      interactive
+      className={cn('exercise-card', className)}
+      onClick={onSelect}
+      onTouchStart={handleTouchStart}
+      {...props}
+    >
+      <div 
+        className="aspect-video rounded overflow-hidden"
+        aria-label={`Thumbnail for ${title}`}
+      >
+        <img
+          src={thumbnailUrl}
+          alt={`${title} preview`}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <h3 className="mt-2 text-lg font-medium">{title}</h3>
+    </BaseCard>
+  );
+};
+
+ExerciseCard.displayName = 'ExerciseCard';
+```
+
+## iOS Requirements
+- Inherits touch target requirements from BaseCard
+- Provides haptic feedback on touch
+- Maintains smooth image loading
+- Proper safe area handling
+
+## Accessibility
+- Proper image alt text
+- Descriptive ARIA labels
+- Keyboard navigation support
+- Focus management
+
+## Testing
+```typescript
+describe('ExerciseCard', () => {
+  it('renders exercise information correctly', () => {
+    render(
+      <ExerciseCard
+        exerciseId="test"
+        title="Push-ups"
+        thumbnailUrl="test.jpg"
+        onSelect={() => {}}
+      />
+    );
+    
+    expect(screen.getByText('Push-ups')).toBeInTheDocument();
+    expect(screen.getByAltText('Push-ups preview')).toBeInTheDocument();
+  });
+
+  it('calls onSelect when clicked', () => {
+    const onSelect = jest.fn();
+    render(
+      <ExerciseCard
+        exerciseId="test"
+        title="Push-ups"
+        thumbnailUrl="test.jpg"
+        onSelect={onSelect}
+      />
+    );
+    
+    userEvent.click(screen.getByRole('button'));
+    expect(onSelect).toHaveBeenCalled();
+  });
+
+  it('provides haptic feedback on touch', () => {
+    const vibrateMock = jest.fn();
+    Object.defineProperty(window.navigator, 'vibrate', {
+      value: vibrateMock,
+      writable: true
+    });
+    
+    render(
+      <ExerciseCard
+        exerciseId="test"
+        title="Push-ups"
+        thumbnailUrl="test.jpg"
+        onSelect={() => {}}
+      />
+    );
+    
+    fireEvent.touchStart(screen.getByRole('button'));
+    expect(vibrateMock).toHaveBeenCalledWith(10);
+  });
+});
+```
+
+## Performance
+- Lazy loading for thumbnails
+- Memoized touch handlers
+- Proper image sizing to prevent layout shifts
+- Inherits BaseCard performance optimizations
+
+## Related Components
+- BaseCard - Parent component
+- ExerciseModal - Displayed when card is selected (handled externally)
+
+## Implementation Notes
+1. ExerciseCard is focused solely on displaying exercise previews and handling selection
+2. Modal display is handled by parent components
+3. Maintain proper image aspect ratios
+4. Ensure smooth loading states
+
+Remember: ExerciseCard's responsibility ends at triggering onSelect. Modal display and video playback are handled by other components.
